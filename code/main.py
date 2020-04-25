@@ -2,6 +2,7 @@
 
 
 import cv2
+import roi_module
 
 
 CAP = cv2.VideoCapture(0)
@@ -19,3 +20,5 @@ while True:
 
 CAP.release()
 cv2.destroyAllWindows()
+
+roi_module.test()
