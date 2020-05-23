@@ -4,6 +4,7 @@ import dlib
 import cv2
 from collections import OrderedDict
 from imutils import face_utils
+import numpy as np
 
 
 FACIAL_LANDMARKS_81_IDXS = OrderedDict([("mouth", (48, 68)),
@@ -34,28 +35,38 @@ def rect_to_bb(rect):
     return (x_coord, y_coord, width, height)
 
 
-def rectangles(i, RECT, FRAME):
+def rectangles(i, RECT, FRAME, bpm):
     (x, y, w, h) = rect_to_bb(RECT)
     cv2.rectangle(FRAME, (x, y), (x+w, y+h), (0, 255, 255), 2)
-    cv2.putText(FRAME, "FACE #{}".format(i + 1), (x - 10, y - 10),
+    cv2.putText(FRAME, "FACE #{} BPM: {}".format(i + 1, bpm), (x - 10, y - 10),
                 cv2.FONT_HERSHEY_SIMPLEX, 0.5, (0, 255, 0), 2)
 
 
-def feature_detection(PREDICTOR, FRAME_ORIG, FRAME, RECT):
-    GRAY = cv2.cvtColor(FRAME_ORIG, cv2.COLOR_BGR2GRAY)
-    SHAPE = PREDICTOR(GRAY, RECT)
+def crop_face(RECT, FRAME):
+    (x, y, w, h) = rect_to_bb(RECT)
+    return FRAME[y:y+h, x:x+w]
+
+
+def feature_detection_forehead(PREDICTOR, FRAME_ORIG, FRAME, RECT):
+    SHAPE = PREDICTOR(FRAME_ORIG, RECT)
     SHAPE = face_utils.shape_to_np(SHAPE)
 
-    FOREHEAD = \
-        FRAME_ORIG[SHAPE[75][1]:SHAPE[19][1], SHAPE[21][0]:SHAPE[22][0]]
+    left = SHAPE[21][0]
+    right = SHAPE[22][0]
+    top = min(SHAPE[21][1], SHAPE[22][1]) - (right - left)
+    bottom = max(SHAPE[21][1], SHAPE[22][1])
+    cv2.rectangle(FRAME, (left, bottom-10), (right, top-10), (0, 0, 255), 2)
 
-    cv2.rectangle(FRAME, (SHAPE[54][0], SHAPE[29][1]),
-                  (SHAPE[12][0], SHAPE[33][1]), (0, 0, 255), 2)
+    return FRAME_ORIG[top:bottom, left:right]
 
-    cv2.rectangle(FRAME, (SHAPE[4][0], SHAPE[29][1]),
-                  (SHAPE[48][0], SHAPE[33][1]), (0, 0, 255), 2)
+def feature_detection_face(PREDICTOR, FRAME_ORIG, FRAME, RECT):
+    SHAPE = PREDICTOR(FRAME_ORIG, RECT)
+    SHAPE = face_utils.shape_to_np(SHAPE)
 
-    cv2.rectangle(FRAME, (SHAPE[21][0], SHAPE[19][1]),
-                  (SHAPE[22][0], SHAPE[75][1]), (0, 0, 255), 2)
+    left = SHAPE[36][0]
+    right = SHAPE[45][0]
+    top = SHAPE[28][1]
+    bottom = SHAPE[30][1]
+    cv2.rectangle(FRAME, (left, bottom-15), (right, top-15), (0, 0, 255), 2)
 
-    return FOREHEAD
+    return FRAME_ORIG[top:bottom, left:right]
