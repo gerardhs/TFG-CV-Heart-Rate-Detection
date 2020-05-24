@@ -55,7 +55,7 @@ def get_bpm(DATA, frame_buffer_size, old_bpm, fps):
     fft[higher_bound:-higher_bound] = 0
     fft[-lower_bound] = 0
     idx = fft.argmax()
-    bpm = freqs[max_idx] * 60
+    bpm = freqs[idx] * 60
     if old_bpm > 0:
         bpm = 0.9 * old_bpm + 0.1 * bpm
     return int(bpm)
@@ -71,11 +71,11 @@ FPS = CAP.get(cv2.CAP_PROP_FPS)
 
 PREDICTOR = dlib.shape_predictor('shape_predictor_81_face_landmarks.dat')
 DETECTOR = dlib.get_frontal_face_detector()
-EVM = Eulerian_Video_Magnification(lvl=6, amplification=10,
+EVM = Eulerian_Video_Magnification(lvl=6, amplification=2,
                                    frame_buffer_size=EVM_FRAMES,
                                    attenuation=0.3, fps=FPS)
-COLOR_GRAPH = GRAPH(1280, 255, 50, 'color', FPS, MIN_HZ, MAX_HZ)
-BPM_GRAPH = GRAPH(1280, 255, 50, 'bpm', FPS, MIN_HZ, MAX_HZ)
+COLOR_GRAPH = GRAPH(1280, 200, 50, 'color', FPS, MIN_HZ, MAX_HZ)
+BPM_GRAPH = GRAPH(1280, 200, 50, 'bpm', FPS, MIN_HZ, MAX_HZ)
 #CAP.set(cv2.CAP_PROP_FRAME_WIDTH, 1280)
 #CAP.set(cv2.CAP_PROP_FRAME_HEIGHT, 720)
 bpm = 0
