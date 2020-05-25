@@ -6,8 +6,10 @@ import numpy as np
 
 
 class Eulerian_Video_Magnification():
+    '''Live Eulerian Video Color Magnification'''
 
-    def __init__(self, lvl, amplification, frame_buffer_size, attenuation, fps):
+    def __init__(self, lvl, amplification,
+                 frame_buffer_size, attenuation, fps):
         self.frames = []
         self.pyramids = []
         self.lvl = lvl
@@ -52,7 +54,9 @@ class Eulerian_Video_Magnification():
         return src + amp
 
     def magnify(self, FRAME, low, high):
-        filtered = self.ideal_bandpassing(self.pyramids[-self.frame_buffer_size:], low, high)
+        filtered =\
+            self.ideal_bandpassing(self.pyramids[-self.frame_buffer_size:],
+                                   low, high)
         amplified = self.amplify(filtered)
         output = self.reconnstruct(FRAME, amplified[-1])
         return output

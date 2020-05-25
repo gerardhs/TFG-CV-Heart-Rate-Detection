@@ -1,17 +1,17 @@
 ''' Live capture using webcam '''
 
 
+import time
+import numpy as np
+from scipy import signal
 import cv2
 import dlib
 import roi_module
 from evm_module import Eulerian_Video_Magnification
 from visualization_module import GRAPH
-import numpy as np
-from scipy import signal
-import time
 
 
-EVM_FRAMES = 200
+EVM_FRAMES = 100
 BPM_FRAME_BUFFER_SIZE = 500
 BPM_MIN_FRAMES = 100
 MIN_HZ = 0.83
@@ -41,8 +41,8 @@ def filter_signal_data(AVG_VALUES, fps):
     values = np.array(AVG_VALUES)
     np.nan_to_num(values, copy=False)
     DETREND = signal.detrend(values, type='linear')
-    DEMEAN = demean(DETREND, 15)
-    filtered = butterworth_filter(DEMEAN, MIN_HZ, MAX_HZ, fps, order=5)
+    #DEMEAN = demean(DETREND, 15)
+    filtered = butterworth_filter(DETREND, MIN_HZ, MAX_HZ, fps, order=5)
     return filtered
 
 
@@ -71,11 +71,11 @@ FPS = CAP.get(cv2.CAP_PROP_FPS)
 
 PREDICTOR = dlib.shape_predictor('shape_predictor_81_face_landmarks.dat')
 DETECTOR = dlib.get_frontal_face_detector()
-EVM = Eulerian_Video_Magnification(lvl=6, amplification=2,
+EVM = Eulerian_Video_Magnification(lvl=6, amplification=5,
                                    frame_buffer_size=EVM_FRAMES,
-                                   attenuation=0.3, fps=FPS)
-COLOR_GRAPH = GRAPH(1280, 200, 50, 'color', FPS, MIN_HZ, MAX_HZ)
-BPM_GRAPH = GRAPH(1280, 200, 50, 'bpm', FPS, MIN_HZ, MAX_HZ)
+                                   attenuation=1, fps=FPS)
+COLOR_GRAPH = GRAPH(1280, 200, 50, 'color')
+BPM_GRAPH = GRAPH(1280, 200, 50, 'bpm')
 #CAP.set(cv2.CAP_PROP_FRAME_WIDTH, 1280)
 #CAP.set(cv2.CAP_PROP_FRAME_HEIGHT, 720)
 bpm = 0

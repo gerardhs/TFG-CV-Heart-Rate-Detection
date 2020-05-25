@@ -6,7 +6,7 @@ from scipy import signal
 
 class GRAPH():
 
-    def __init__(self, width, height, max_values, type, fps, low, high):
+    def __init__(self, width, height, max_values, type):
         self.avg_color = []
         self.blue = []
         self.green = []
@@ -42,8 +42,9 @@ class GRAPH():
             self.avg_color.pop(0)
 
     def draw_color_graph(self, data, color):
-        cv2.putText(self.graph, '0', (1, 250), cv2.FONT_HERSHEY_SIMPLEX,
-                    0.5, (255, 255, 255), 1, cv2.LINE_AA, False)
+        cv2.putText(self.graph, '0', (1, int(self.height - 5)),
+                    cv2.FONT_HERSHEY_SIMPLEX, 0.5, (255, 255, 255), 1,
+                    cv2.LINE_AA, False)
         cv2.putText(self.graph, '255', (1, 15), cv2.FONT_HERSHEY_SIMPLEX,
                     0.5, (255, 255, 255), 1, cv2.LINE_AA, False)
         scale_factor_x = float(self.width) / self.max_values

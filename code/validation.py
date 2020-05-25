@@ -14,12 +14,13 @@ import heartpy as hp
 
 PREDICTOR = dlib.shape_predictor('shape_predictor_81_face_landmarks.dat')
 DETECTOR = dlib.get_frontal_face_detector()
-EVM = Eulerian_Video_Magnification(lvl=6, amplification=80,
-                                   frame_buffer_size=50, attenuation=1)
+
 
 CAP = cv2.VideoCapture('./data/P1LC1/P1LC1_original.MTS')
 fps = CAP.get(cv2.CAP_PROP_FPS)
-EVM.fps = fps
+
+EVM = Eulerian_Video_Magnification(lvl=6, amplification=80,
+                                   frame_buffer_size=50, attenuation=1, fps=fps)
 
 fig = plt.figure()
 ax = fig.add_subplot(1, 1, 1)
