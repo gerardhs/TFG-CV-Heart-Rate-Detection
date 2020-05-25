@@ -126,12 +126,15 @@ while True:
             COLOR_GRAPH.draw_color_graph(COLOR_GRAPH.green, 'green')
             COLOR_GRAPH.draw_color_graph(COLOR_GRAPH.red, 'red')
             COLOR_GRAPH.draw_color_graph(COLOR_GRAPH.avg_color, 'white')
+
             AVG_VALUES.append(COLOR_GRAPH.green[-1])
             TIMES.append(time.time())
+            BPM_GRAPH.write_bpm(bpm, AVG_VALUES, BPM_FRAME_BUFFER_SIZE)
+
             if len(AVG_VALUES) > BPM_FRAME_BUFFER_SIZE:
                 AVG_VALUES.pop(0)
                 TIMES.pop(0)
-            BPM_GRAPH.write_bpm(bpm, AVG_VALUES, BPM_FRAME_BUFFER_SIZE)
+
             if len(AVG_VALUES) > BPM_MIN_FRAMES:
                 TIME_ELAPSED = TIMES[-1] - TIMES[0]
                 SAMPLING_RATE = len(AVG_VALUES) / TIME_ELAPSED
@@ -140,6 +143,7 @@ while True:
                 bpm = get_bpm(FILTERED, len(FILTERED), bpm, SAMPLING_RATE)
                 BPMS.append(bpm)
                 BPM_GRAPH.draw_bpm_graph()
+
     FRAME = cv2.resize(FRAME[:, :, :], (640, 512))
     if len(EVM.frames) > EVM.frame_buffer_size:
         cv2.imshow('Heart Beat Detector',
@@ -156,8 +160,10 @@ while True:
         cv2.imshow('Heart Beat Detector',
                    np.vstack((np.vstack((np.hstack((FRAME, EVM_IMG)),
                               COLOR_GRAPH.graph)), BPM_GRAPH.graph)))
+
     COLOR_GRAPH.refresh()
     BPM_GRAPH.refresh()
+    
     if cv2.waitKey(1) & 0xFF == ord('q'):
         break
 
