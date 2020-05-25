@@ -1,4 +1,3 @@
-import heartpy as hp
 import numpy as np
 import cv2
 from scipy import signal
@@ -17,11 +16,6 @@ class GRAPH():
         self.graph = np.zeros((self.height, self.width, 3), np.uint8)
         self.max_values = max_values
         self.type = type
-
-
-    def bpm(self, ys, fs):
-        working_data, measures = hp.process(ys, fs, high_precision=True)
-        return measures['bpm']
 
     def refresh(self):
         self.graph = np.zeros((self.height, self.width, 3), np.uint8)
