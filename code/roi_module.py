@@ -38,8 +38,9 @@ def rect_to_bb(rect):
 def rectangles(i, RECT, FRAME, bpm):
     (x, y, w, h) = rect_to_bb(RECT)
     cv2.rectangle(FRAME, (x, y), (x+w, y+h), (0, 255, 255), 2)
-    cv2.putText(FRAME, "FACE #{} BPM: {}".format(i + 1, bpm), (x - 10, y - 10),
-                cv2.FONT_HERSHEY_SIMPLEX, 0.5, (0, 255, 0), 2)
+    cv2.putText(FRAME, "FACE #{} BPM: {}".format(i + 1, bpm), (x, y-10),
+                cv2.FONT_HERSHEY_SIMPLEX, 0.5, (0, 255, 0), 1, cv2.LINE_AA,
+                False)
 
 
 def crop_face(RECT, FRAME):
@@ -58,6 +59,7 @@ def feature_detection_forehead(PREDICTOR, FRAME_ORIG, FRAME, RECT):
     cv2.rectangle(FRAME, (left, bottom-10), (right, top-10), (0, 0, 255), 2)
 
     return FRAME_ORIG[top:bottom, left:right]
+
 
 def feature_detection_face(PREDICTOR, FRAME_ORIG, FRAME, RECT):
     SHAPE = PREDICTOR(FRAME_ORIG, RECT)

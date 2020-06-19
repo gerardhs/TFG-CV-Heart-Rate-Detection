@@ -24,9 +24,10 @@ class GRAPH():
                         (int(self.width/3), 20), cv2.FONT_HERSHEY_SIMPLEX, 0.5,
                         (255, 255, 255), 1, cv2.LINE_AA, False)
         elif self.type == 'bpm':
-            cv2.putText(self.graph, 'RPPG signal graph',
-                        (int(self.width/2.5), 20), cv2.FONT_HERSHEY_SIMPLEX,
-                        0.5, (255, 255, 255), 1, cv2.LINE_AA, False)
+            cv2.putText(self.graph,
+                        'PPG SIGNAL', (int(self.width/2.5), 20),
+                        cv2.FONT_HERSHEY_SIMPLEX, 0.5, (255, 255, 255), 1, cv2.LINE_AA,
+                        False)
         if len(self.filtered_graph) > self.max_values:
             self.filtered_graph.pop(0)
         if len(self.avg_color) > self.max_values:
@@ -76,11 +77,11 @@ class GRAPH():
 
     def write_bpm(self, bpm, AVG_VALUES, FRAME_BUFFER_SIZE):
         cv2.putText(self.graph, '{} BPM'.format(bpm),
-                    (int(self.width - 180), int(self.height/2)),
-                    cv2.FONT_HERSHEY_SIMPLEX, 1, (0, 255, 0),
+                    (int(self.width - 200), int(self.height/2)),
+                    cv2.FONT_HERSHEY_SIMPLEX, 1.5, (0, 255, 0),
                     1, cv2.LINE_AA, False)
-        cv2.putText(self.graph, '{} / {} frames'.format(len(AVG_VALUES),
-                                                        FRAME_BUFFER_SIZE),
-                    (int(self.width - 180), int(self.height - 50)),
+        cv2.putText(self.graph, '{} / {}'.format(len(AVG_VALUES),
+                                                 FRAME_BUFFER_SIZE),
+                    (int(self.width - 165), int(self.height - 50)),
                     cv2.FONT_HERSHEY_SIMPLEX, 0.5, (0, 255, 0),
                     1, cv2.LINE_AA, False)
