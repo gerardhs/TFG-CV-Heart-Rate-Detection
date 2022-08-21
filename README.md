@@ -10,6 +10,6 @@ L'objectiu del projecte és crear un sistema basat en visió per computador capa
 ## Description
 
 ##### Carpeta code: 
-Codi executable
+&emsp; Codi executable
 ##### Carpeta code/data: 
-Resultats validació.
+&emsp; Resultats validació.
